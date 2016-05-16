@@ -1,15 +1,9 @@
-export const connect = user => {
-  return {
-    type: 'CONNECT',
-    user,
-  }
-};
-
-export const message = (user, message) => {
+export const sendMessage = (message, user, room) => {
   return {
     type: 'MESSAGE',
+    message,
     user,
-    message
+    room
   }
 };
 

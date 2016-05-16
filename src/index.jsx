@@ -7,18 +7,16 @@ import App from './components/App';
 import io from 'socket.io-client';
 
 let store = createStore(djApp);
-/*
+
+let socket = io.connect('localhost:8090');
+
+socket.on('action', data => {
+  store.dispatch(data);
+});
+
 ReactDOM.render(
   <Provider store={store}>
-    <App/>
+    <App socket={socket}/>
   </Provider>,
   document.getElementById('app')
 );
-*/
-
-const socket = io('localhost:8090');
-socket.on('state', state => {
-  console.log(state);
-});
-
-socket.emit('join', 'nick', 'longcat' );

@@ -1,4 +1,13 @@
 import React, { Component } from 'react';
+import { Map } from 'immutable';
+
+
+const video = "dQw4w9WgXcQ";
+
+const initialState = Map({
+  video: "",
+  playing: false
+});
 
 const Player = props => (
   <div className="player">

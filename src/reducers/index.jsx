@@ -1,7 +1,19 @@
 import { combineReducers } from 'redux';
+import { fromJS } from 'immutable';
 
-const video = (state = {}, action) => {
-  return state;
+const initialState = fromJS({
+  user: '',
+  room: '',
+  messages: {}
+});
+
+const chat = (state = initialState, action) => {
+  switch(action.type) {
+    case 'SET_STATE':
+      return action.state;
+    default:
+      return state;
+  }
 }
 /*
 const djApp = combineReducers({
@@ -9,6 +21,6 @@ const djApp = combineReducers({
   chat
 });
 */
-const djApp = video;
+const djApp = chat;
 export default djApp;
 

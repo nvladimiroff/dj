@@ -1,16 +1,38 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Map } from 'immutable';
 import Chat from './Chat';
+import Login from './Login';
+import { connect } from '../actions';
 
-const video = "dQw4w9WgXcQ";
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      username: '',
+      room: '',
+      joined: false
+    }
+  }
 
-const initialState = Map({
-  video: "",
-  playing: false
-});
+  onSubmit({ username, room }) {
+    const { socket } = this.props;
+    socket.emit('join', username, room);
+    this.setState({ joined: true, username, room });
+  }
 
-const App = props => {
-  <Chat/>
-};
+  render() {
+    if(!this.state.joined) {
+      return <Login onSubmit={ this.onSubmit.bind(this) } />;
+    } else {
+      return (
+        <Chat
+          username={this.state.username}
+          room={this.state.room}
+          socket={ this.props.socket }
+        />
+      );
+    }
+  }
+}
 
 export default App;
