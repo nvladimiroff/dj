@@ -1,4 +1,29 @@
-.player {
+html, body, #app, .container {
+    height: 100%;
+    width: 100%;
+}
+
+.container {
     display: flex;
+    justify-content: space-between;
+}
+
+.not-playing {
+    width: 420px;
+    height: 315px;
+    align-items: center;
     justify-content: center;
+    align-self: center;
+    display: flex;
+    background: rgb(30,30,30);
+    color: rgb(230,230,230);
+}
+
+.chat {
+    align-self: right;
+    height: 100%;
+}
+
+.selector {
+    height: 100%;
 }

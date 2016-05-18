@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Login from './Login';
 import Chat from './Chat';
+import Player from './Player';
+import VideoSelector from './VideoSelector';
 import { joinRoom } from '../actions';
 
 class App extends Component {
@@ -25,11 +27,11 @@ class App extends Component {
       return <Login onSubmit={ this.onSubmit.bind(this) } />;
     } else {
       return (
-        <Chat
-          username={ this.state.username }
-          room={ this.props.room }
-          socket={ this.props.socket }
-        />
+        <div className="container">
+          <VideoSelector />
+          <Player />
+          <Chat />
+        </div>
       );
     }
   }

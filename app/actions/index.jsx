@@ -23,4 +23,4 @@ const join = (username, room) => {
 export const joinRoom = (username, room) => (dispatch, getState, socket) => {
   dispatch(join(username, room));
   socket.emit('join', join(username, room));
-}
+};

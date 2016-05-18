@@ -15,7 +15,12 @@ class Chat extends Component {
     e.preventDefault();
     const { username, room, dispatch } = this.props;
     const message = e.target.children[0].value.trim();
+
+    if(!message)
+      return;
+
     dispatch(sendMessage(message, username, room));
+    this.setState({ text: '' });
   }
 
   handleChange(e) {
@@ -49,10 +54,10 @@ Chat.defaultProps = {
 
 const mapStateToProps = state => {
   return {
-    users: state.toJS().users,
-    messages: state.toJS().messages,
-    username: state.toJS().username,
-    room: state.toJS().room
+    users: state.toJS().chat.users,
+    messages: state.toJS().chat.messages,
+    username: state.toJS().chat.username,
+    room: state.toJS().chat.room
   };
 };
 

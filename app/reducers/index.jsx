@@ -1,14 +1,24 @@
-import { combineReducers } from 'redux';
-import { fromJS } from 'immutable';
+import { combineReducers } from 'redux-immutable';
+import { fromJS, toJS } from 'immutable';
 
 const initialState = fromJS({
-  users: [],
-  username: '',
-  room: '',
-  messages: []
+  chat: {
+    users: [],
+    username: '',
+    room: '',
+    messages: []
+  },
+  player: {
+    video: '',
+    playing: false
+  }
 });
 
-const chat = (state = initialState, action) => {
+const player = (state = initialState.get('player'), action) => {
+  return state;
+};
+
+const chat = (state = initialState.get('chat'), action) => {
   switch(action.type) {
     case 'SET_STATE':
       return state.merge(action.state);
@@ -19,13 +29,12 @@ const chat = (state = initialState, action) => {
     default:
       return state;
   }
-}
-/*
+};
+
 const djApp = combineReducers({
-  video,
+  player,
   chat
 });
-*/
-const djApp = chat;
+
 export default djApp;
 

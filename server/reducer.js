@@ -14,12 +14,18 @@ const connect = (state, action) => {
 };
 
 const disconnect = (state, action) => {
-  return state.updateIn(['rooms', action.room, 'users'], set => set.delete(action.username));
+  return state.updateIn(['rooms', action.room, 'users'], set => {
+    if (set)
+      return set.delete(action.username);
+  });
 };
 
 const message = (state, action) => {
   const msgElement = fromJS({ message: action.message, username: action.username });
-  return state.updateIn(['rooms', action.room, 'messages'], list => list.push(msgElement));
+  return state.updateIn(['rooms', action.room, 'messages'], list => {
+    if(list)
+      return list.push(msgElement);
+  });
 };
 
 const reducer = (state=initialState, action) => {
