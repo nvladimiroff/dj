@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../actions';
+import { toJS } from 'immutable';
 
 class Chat extends Component {
   constructor() {
     super();
     this.state = {
-      text: '',
-      name: ''
+      text: ''
     };
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    const { socket, username, room } = this.props;
+    const { username, room, dispatch } = this.props;
     const message = e.target.children[0].value.trim();
-    socket.emit('action', sendMessage(message, username, room));
+    dispatch(sendMessage(message, username, room));
   }
 
   handleChange(e) {
@@ -49,8 +49,10 @@ Chat.defaultProps = {
 
 const mapStateToProps = state => {
   return {
-    users: state.users,
-    messages: state.messages
+    users: state.toJS().users,
+    messages: state.toJS().messages,
+    username: state.toJS().username,
+    room: state.toJS().room
   };
 };
 

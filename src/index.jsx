@@ -1,22 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import thunk from 'redux-thunk';
+import { Router, Route, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import djApp from './reducers';
-import App from './components/App';
+import { createStore, applyMiddleware } from 'redux';
 import io from 'socket.io-client';
-
-let store = createStore(djApp);
+import djApp from './reducers';
+import { App, Home } from './components/';
 
 let socket = io.connect('localhost:8090');
+let store = createStore(
+  djApp,
+  applyMiddleware(thunk.withExtraArgument(socket))
+);
 
 socket.on('action', data => {
   store.dispatch(data);
 });
 
-ReactDOM.render(
+const AppWrapper = props =>
   <Provider store={store}>
-    <App socket={socket}/>
-  </Provider>,
+    <App room={props.params.room} />
+  </Provider>;
+
+ReactDOM.render(
+  <Router history={browserHistory}>
+    <Route path="/" component={Home} />
+    <Route path="/room/:room" component={AppWrapper} />
+  </Router>,
   document.getElementById('app')
 );
