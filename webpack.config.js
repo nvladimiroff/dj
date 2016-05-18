@@ -1,6 +1,6 @@
 module.exports = {
   entry: [
-    './src/index.jsx'
+    './app/index.jsx'
   ],
   module: {
     loaders: [{
