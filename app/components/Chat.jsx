@@ -11,6 +11,10 @@ class Chat extends Component {
     };
   }
 
+  componentWillUpdate() {
+    this.refs.messages.scrollTop = this.refs.messages.scrollHeight;
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     const { username, room, dispatch } = this.props;
@@ -31,13 +35,13 @@ class Chat extends Component {
     const { messages } = this.props;
 
     return (
-      <div className="chat">
-        <ul>
+      <div className="chat pure-u-1-3">
+        <ul ref="messages" className="messages">
           {messages.map(msg => <li>{msg.username + ': ' +msg.message}</li> ) }
         </ul>
         <div className="footer">
-          <form onSubmit={ this.handleSubmit.bind(this) } >
-            <input type="text" value={this.state.text} onChange={this.handleChange.bind(this) } />
+          <form className="pure-form" onSubmit={ this.handleSubmit.bind(this) } >
+            <input type="text" value={this.state.text} placeholder="Message" onChange={this.handleChange.bind(this) } />
           </form>
         </div>
       </div>

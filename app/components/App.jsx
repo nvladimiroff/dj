@@ -27,7 +27,7 @@ class App extends Component {
       return <Login onSubmit={ this.onSubmit.bind(this) } />;
     } else {
       return (
-        <div className="container">
+        <div className="pure-g">
           <VideoSelector />
           <Player />
           <Chat />

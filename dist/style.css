@@ -3,11 +3,6 @@ html, body, #app, .container {
     width: 100%;
 }
 
-.container {
-    display: flex;
-    justify-content: space-between;
-}
-
 .not-playing {
     width: 420px;
     height: 315px;
@@ -20,10 +15,25 @@ html, body, #app, .container {
 }
 
 .chat {
-    align-self: right;
     height: 100%;
+    position: relative;
 }
 
 .selector {
     height: 100%;
+}
+
+.messages {
+    list-style-type: none;
+    list-style-position: inside;
+    padding: 0;
+    margin-bottom: 40px;
+    margin-top: 0;
+    overflow: auto;
+    max-height: 500px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
 }

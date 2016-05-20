@@ -12,7 +12,7 @@ const NotPlaying = props => (
 );
 
 const Player = props => (
-  <div className="player">
+  <div className="player pure-u-1-3">
     { props.playing ? <iframe width="420" height="315" src={"https://www.youtube.com/embed/" + props.video} frameborder="0" allowfullscreen></iframe> : <NotPlaying />}
   </div>
 );
