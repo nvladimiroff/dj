@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Sortable, { SortableItemMixin } from 'react-anything-sortable';
+import Sortable from 'react-anything-sortable';
 import { reorder, addVideo, removeVideo } from '../actions';
-
-var PlaylistElement = React.createClass({
-  mixins: [SortableItemMixin],
-
-  render: function(){
-    return this.renderWithSortable(
-      <div>{this.props.children}</div>
-    );
-  }
-});
+import PlaylistElement from './PlaylistElement';
 
 class VideoSelector extends Component {
   constructor() {
