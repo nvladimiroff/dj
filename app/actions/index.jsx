@@ -24,3 +24,25 @@ export const joinRoom = (username, room) => (dispatch, getState, socket) => {
   dispatch(join(username, room));
   socket.emit('join', join(username, room));
 };
+
+export const addVideo = (artist, title, url) => {
+  const video = { artist, title, url };
+  return {
+    type: 'ADD_VIDEO',
+    video
+  }
+};
+
+export const removeVideo = video => {
+  return {
+    type: 'REMOVE_VIDEO',
+    video
+  }
+};
+
+export const reorder = videos => {
+  return {
+    type: 'REORDER',
+    videos
+  }
+};

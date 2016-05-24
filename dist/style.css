@@ -37,3 +37,11 @@ html, body, #app, .container {
     position: absolute;
     bottom: 0;
 }
+
+.button-error {
+    background: rgb(202, 60, 60);
+}
+
+.vertical.ui-sortable-item {
+  float: none;
+}

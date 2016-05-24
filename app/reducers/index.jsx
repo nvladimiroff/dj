@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux-immutable';
-import { fromJS, toJS } from 'immutable';
+import { fromJS, toJS, is } from 'immutable';
 
 const initialState = fromJS({
   chat: {
@@ -10,12 +10,24 @@ const initialState = fromJS({
   },
   player: {
     video: '',
-    playing: false
+    playing: false,
+    videos: []
   }
 });
 
 const player = (state = initialState.get('player'), action) => {
-  return state;
+  switch(action.type) {
+    case 'ADD_VIDEO':
+      return state.update('videos', list => list.unshift(action.video));
+    case 'REMOVE_VIDEO':
+      console.log("Removing " + action.video.title);
+      return state.update('videos', list => list.filterNot(ele => is(ele, fromJS(action.video))));
+    case 'REORDER':
+      console.log("Top video is " + action.videos[0].title);
+      return state.set('videos', fromJS(action.videos));
+    default:
+      return state;
+  }
 };
 
 const chat = (state = initialState.get('chat'), action) => {

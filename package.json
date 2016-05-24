@@ -23,6 +23,7 @@
     "express": "^4.13.4",
     "immutable": "^3.8.1",
     "react": "^15.0.2",
+    "react-anything-sortable": "^1.5.0",
     "react-dom": "^15.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",

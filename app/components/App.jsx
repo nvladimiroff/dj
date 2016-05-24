@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import Login from './Login';
 import Chat from './Chat';
 import Player from './Player';
+import Queue from './Queue';
 import VideoSelector from './VideoSelector';
 import { joinRoom } from '../actions';
 
@@ -27,10 +28,13 @@ class App extends Component {
       return <Login onSubmit={ this.onSubmit.bind(this) } />;
     } else {
       return (
-        <div className="pure-g">
-          <VideoSelector />
-          <Player />
-          <Chat />
+        <div>
+          <div className="pure-g">
+            <VideoSelector />
+            <Player />
+            <Chat />
+          </div>
+          <Queue />
         </div>
       );
     }
