@@ -25,8 +25,7 @@ export const joinRoom = (username, room) => (dispatch, getState, socket) => {
   socket.emit('join', join(username, room));
 };
 
-export const addVideo = (artist, title, url) => {
-  const video = { artist, title, url };
+export const addVideo = video => {
   return {
     type: 'ADD_VIDEO',
     video

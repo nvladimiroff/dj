@@ -1,21 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Sortable from 'react-anything-sortable';
+import Modal from 'react-modal';
 import { reorder, addVideo, removeVideo } from '../actions';
 import PlaylistElement from './PlaylistElement';
+import AddVideoForm from './AddVideoForm';
 
 class VideoSelector extends Component {
   constructor() {
     super();
     this.state = {
       videoText: '',
+      isModalOpen: false
     };
+  }
+
+  openModal() {
+    this.setState({isModalOpen: true});
+  }
+
+  closeModal() {
+    this.setState({isModalOpen: false});
   }
 
   render() {
     const { videos, dispatch } = this.props;
+
     return (
       <div className="selector pure-u-1-3">
+        <button onClick={this.openModal.bind(this)} className="pure-button pure-button-primary">Add a video</button>
         <Sortable onSort={obj => dispatch(reorder(obj))} direction="vertical" dynamic={true}>
           {videos.map((vid, i) =>
             <PlaylistElement className="vertical" sortData={vid} key={i}>
@@ -23,11 +36,13 @@ class VideoSelector extends Component {
             </PlaylistElement>
           )}
         </Sortable>
-
-        <form className="pure-form">
-          <input className="video-add" type="text" placeholder="Paste a youtube link here" />
-          <button onClick={this.addVideo} type="submit" className="pure-button pure-button-primary">Add</button>
-        </form>
+        <Modal
+          isOpen={this.state.isModalOpen}
+          onRequestClose={this.closeModal}>
+          <AddVideoForm
+            closeModal={this.closeModal.bind(this)}
+          />
+        </Modal>
       </div>
     );
   }

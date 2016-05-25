@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux-immutable';
 import { fromJS, toJS, is } from 'immutable';
+import { reducer as formReducer } from 'redux-form';
 
 const initialState = fromJS({
   chat: {
@@ -45,7 +46,8 @@ const chat = (state = initialState.get('chat'), action) => {
 
 const djApp = combineReducers({
   player,
-  chat
+  chat,
+  form: (state = fromJS({}), action) => fromJS(formReducer(state.toJS(), action))
 });
 
 export default djApp;

@@ -4,9 +4,12 @@ import thunk from 'redux-thunk';
 import { Router, Route, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import createLogger from 'redux-logger';
 import io from 'socket.io-client';
 import djApp from './reducers';
 import { App, Home } from './components/';
+
+let logger = createLogger();
 
 let socket = io.connect('localhost:8090');
 let store = createStore(
