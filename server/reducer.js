@@ -6,8 +6,10 @@ const initialState = fromJS({
 
 const connect = (state, action) => {
   if(!state.get('rooms').get(action.room)) {
-    return state.setIn(['rooms', action.room, 'users'], Set().add(action.username))
-                .setIn(['rooms', action.room, 'messages'], List());
+    return state
+      .setIn(['rooms', action.room, 'users'], Set().add(action.username))
+      .setIn(['rooms', action.room, 'messages'], List())
+      .setIn(['rooms', action.room, 'queue'], List());
   } else {
     return state.updateIn(['rooms', action.room, 'users'], set => set.add(action.username));
   }
@@ -28,6 +30,10 @@ const message = (state, action) => {
   });
 };
 
+const joinQueue = (state, action) => {
+  return state.updateIn(['rooms', action.room, 'queue'], list => list.push(action.username));
+};
+
 const reducer = (state=initialState, action) => {
   switch(action.type) {
     case 'CONNECT':
@@ -36,6 +42,8 @@ const reducer = (state=initialState, action) => {
       return disconnect(state, action);
     case 'MESSAGE':
       return message(state, action);
+    case 'JOIN_QUEUE':
+      return joinQueue(state, action);
   }
 };
 

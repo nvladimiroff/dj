@@ -9,8 +9,12 @@ export const startServer = store => {
 
     socket.on('join', data => {
       unsubscribe = store.subscribe(() => {
-        const state = store.getState().getIn(['rooms', data.room]).toJS();
-        io.emit('action', { type: 'SET_STATE', state });
+        const state = store.getState().getIn(['rooms', data.room]);
+        const chatState = state.delete('queue').toJS();
+        const playerState = state.delete('messages').delete('users').toJS();
+
+        io.emit('action', { type: 'SET_CHAT_STATE', chatState });
+        io.emit('action', { type: 'SET_PLAYER_STATE', playerState });
       });
 
       store.dispatch({ type: 'CONNECT', username: data.username, room: data.room });

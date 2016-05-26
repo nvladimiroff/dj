@@ -45,3 +45,16 @@ export const reorder = videos => {
     videos
   }
 };
+
+const joinQ = (username, room) => {
+  return {
+    type: 'JOIN_QUEUE',
+    username,
+    room
+  }
+};
+
+export const joinQueue = (username, room) => (dispatch, getState, socket) => {
+  dispatch(joinQ(username, room));
+  socket.emit('action', joinQ(username, room));
+};
