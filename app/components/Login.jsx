@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
+import store from 'store';
 
 export default class Login extends Component {
   constructor() {
     super();
+
     this.state = {
       username: "",
     };
+  }
+
+  componentDidMount() {
+    const username = store.get('username');
+    if(username) {
+      this.props.onSubmit({ username });
+    }
+
   }
 
   handleNameChange(e) {
@@ -19,6 +29,7 @@ export default class Login extends Component {
       return;
     }
 
+    store.set('username', this.state.username.trim());
     this.props.onSubmit({ username: this.state.username.trim() });
   }
 
