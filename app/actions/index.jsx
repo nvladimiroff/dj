@@ -25,25 +25,37 @@ export const joinRoom = (username, room) => (dispatch, getState, socket) => {
   socket.emit('join', join(username, room));
 };
 
-export const addVideo = video => {
-  return {
+export const addVideo = video => (dispatch, getState, socket) => {
+  dispatch({
     type: 'ADD_VIDEO',
     video
-  }
+  });
+
+  const playlist = getState().get('player').get('videos');
+  const username = getState().get('chat').get('username');
+  socket.emit('action', {type: 'UPDATE_PLAYLIST', username, playlist})
 };
 
-export const removeVideo = video => {
-  return {
+export const removeVideo = video => (dispatch, getState, socket) => {
+  dispatch({
     type: 'REMOVE_VIDEO',
     video
-  }
+  });
+
+  const playlist = getState().get('player').get('videos');
+  const username = getState().get('chat').get('username');
+  socket.emit('action', {type: 'UPDATE_PLAYLIST', username, playlist})
 };
 
 export const reorder = videos => {
-  return {
+  dispatch({
     type: 'REORDER',
     videos
-  }
+  });
+
+  const playlist = getState().get('player').get('videos');
+  const username = getState().get('chat').get('username');
+  socket.emit('action', {type: 'UPDATE_PLAYLIST', username, playlist})
 };
 
 const joinQ = (username, room) => {

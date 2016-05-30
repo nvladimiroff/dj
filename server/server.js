@@ -11,14 +11,19 @@ export const startServer = store => {
       unsubscribe = store.subscribe(() => {
         const state = store.getState().getIn(['rooms', data.room]);
         const chatState = state.delete('queue').toJS();
-        const playerState = state.delete('messages').delete('users').toJS();
+        let playerState = state.delete('messages').delete('users');
+        const playlist = store.getState().getIn(['users', data.username, 'playlist']);
+
+        if(playlist) {
+          playerState = playerState.merge({ videos: playlist.toJS() });
+        }
 
         io.emit('action', { type: 'SET_CHAT_STATE', chatState });
-        io.emit('action', { type: 'SET_PLAYER_STATE', playerState });
+        io.emit('action', { type: 'SET_PLAYER_STATE', playerState: playerState.toJS() });
       });
 
       store.dispatch({ type: 'CONNECT', username: data.username, room: data.room });
-      info = data
+      info = data;
     });
 
     socket.on('action', store.dispatch.bind(store));

@@ -1,7 +1,8 @@
 import { fromJS, Set, List } from 'immutable';
 
 const initialState = fromJS({
-  rooms: {}
+  rooms: {},
+  users: {}
 });
 
 const connect = (state, action) => {
@@ -34,6 +35,10 @@ const joinQueue = (state, action) => {
   return state.updateIn(['rooms', action.room, 'queue'], list => list.push(action.username));
 };
 
+const updatePlaylist = (state, action) => {
+  return state.setIn(['users', action.username, 'playlist'], fromJS(action.playlist));
+}
+
 const reducer = (state=initialState, action) => {
   switch(action.type) {
     case 'CONNECT':
@@ -44,6 +49,8 @@ const reducer = (state=initialState, action) => {
       return message(state, action);
     case 'JOIN_QUEUE':
       return joinQueue(state, action);
+    case 'UPDATE_PLAYLIST':
+      return updatePlaylist(state, action);
   }
 };
 
