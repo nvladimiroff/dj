@@ -5,12 +5,16 @@ const initialState = fromJS({
   users: {}
 });
 
+const initialRoomState = fromJS({
+  users: [],
+  messages: [], // :: [{message, username}]
+  queue: [],
+  playing: {} // :: {duration, started, video}
+});
+
 const connect = (state, action) => {
   if(!state.get('rooms').get(action.room)) {
-    return state
-      .setIn(['rooms', action.room, 'users'], Set().add(action.username))
-      .setIn(['rooms', action.room, 'messages'], List())
-      .setIn(['rooms', action.room, 'queue'], List());
+    return state.setIn(['rooms', action.room], initialRoomState.set('users', [action.username]))'
   } else {
     return state.updateIn(['rooms', action.room, 'users'], set => set.add(action.username));
   }

@@ -35,5 +35,15 @@ export const startServer = store => {
       }
     });
   });
+
+  setInterval(() => {
+    const state = store.getState();
+    state.get('rooms').forEach(room => {
+      if(room.getIn('playing', 'duration') <= room.getIn('playing', 'started
+      if(room.get('queue') && !room.get('queue').isEmpty()) {
+
+      }
+    });
+  }, 1000);
 };
 
