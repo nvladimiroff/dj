@@ -9,7 +9,8 @@ const initialRoomState = fromJS({
   users: [],
   messages: [], // :: [{message, username}]
   queue: [],
-  playing: {} // :: {duration, started, video}
+  playing: {}, // :: {started, video :: {artist, title, url, duration}}
+  isPlaying: false
 });
 
 const connect = (state, action) => {
@@ -41,7 +42,31 @@ const joinQueue = (state, action) => {
 
 const updatePlaylist = (state, action) => {
   return state.setIn(['users', action.username, 'playlist'], fromJS(action.playlist));
-}
+};
+
+const nextVideo = (state, action) => {
+  const queue = state.getIn(['rooms', action.room, 'queue']);
+  let next;
+  let newQueue = queue;
+  let playlist;
+
+  do {
+    if(newQueue.size == 0) {
+      return state.setIn(['rooms', action.room, 'isPlaying'], false);
+    }
+    next = newQueue.get(0);
+    newQueue = newQueue.shift();
+    playlist = state.getIn(['users', next, 'playlist']);
+  } while(!playlist || !playlist.get(0));
+
+  const newPlaying = fromJS({ started: action.time, video: playlist.get(0) });
+  const newPlaylist = playlist.shift().push(playlist.get(0));
+  return state.setIn(['users', next, 'playlist'], newPlayList)
+              .set('playing', newPlaying)
+              .setIn(['rooms', action.room, 'queue'], newQueue)
+              .setIn(['rooms', action.room, 'isPlaying'], true);
+
+};
 
 const reducer = (state=initialState, action) => {
   switch(action.type) {
@@ -55,6 +80,8 @@ const reducer = (state=initialState, action) => {
       return joinQueue(state, action);
     case 'UPDATE_PLAYLIST':
       return updatePlaylist(state, action);
+    case 'NEXT_VIDEO':
+      return nextVideo(state, action);
   }
 };
 
