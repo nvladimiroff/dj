@@ -15,7 +15,7 @@ const initialRoomState = fromJS({
 
 const connect = (state, action) => {
   if(!state.get('rooms').get(action.room)) {
-    return state.setIn(['rooms', action.room], initialRoomState.set('users', [action.username]));
+    return state.setIn(['rooms', action.room], initialRoomState.set('users', Set([action.username])));
   } else {
     return state.updateIn(['rooms', action.room, 'users'], set => set.add(action.username));
   }
@@ -59,7 +59,7 @@ const nextVideo = (state, action) => {
     playlist = state.getIn(['users', next, 'playlist']);
   } while(!playlist || !playlist.get(0));
 
-  const newPlaying = fromJS({ started: action.time, video: playlist.get(0) });
+  const newPlaying = fromJS({ started: action.started, video: playlist.get(0) });
   const newPlaylist = playlist.shift().push(playlist.get(0));
   return state.setIn(['users', next, 'playlist'], newPlaylist)
               .set('playing', newPlaying)

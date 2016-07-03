@@ -1,13 +1,29 @@
 import React, { Component } from 'react';
 import { addVideo } from '../actions';
 import { reduxForm } from 'redux-form';
+import moment from 'moment';
+import { GOOGLE_API_KEY } from '../../.env';
 
 class AddVideoForm extends Component {
+  getDuration(url) {
+  }
+
   onSubmit(obj) {
     const { dispatch, closeModal } = this.props;
-
-    dispatch(addVideo(obj));
-    closeModal();
+     obj.started = moment();
+     obj.id = /v=([^&]*)/.exec(obj.url)[1];
+     fetch('https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id='+obj.id+'&key='+GOOGLE_API_KEY)
+      .then(res => {
+        console.log(res);
+        res.json().then(json => {
+          console.log(json);
+          obj.duration = moment.duration(json.items[0].contentDetails.duration);
+          dispatch(addVideo(obj));
+          closeModal();
+        }).catch(error => {
+          console.log(error);
+        });
+     });
   }
 
   render() {

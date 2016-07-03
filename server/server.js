@@ -1,5 +1,6 @@
 import Server from 'socket.io';
 import moment from 'moment';
+import { nextVideo } from './actions';
 
 export const startServer = store => {
   const io = new Server().attach(8090);
@@ -45,14 +46,14 @@ export const startServer = store => {
 
     state.get('rooms').forEach((roomMap, room) => {
       if(!roomMap.get('isPlaying')) {
-        store.dispatch({ type: 'NEXT_VIDEO', room, started: moment() });
+        store.dispatch(nextVideo(room, moment()));
       }
       else if(roomMap.get('playing')) {
-        const duration = roomMap.getIn(['playing', 'duration']);
-        const started = roomMap.getIn(['playing', 'started']);
+        const duration = moment.duration(roomMap.getIn(['playing', 'duration']));
+        const started = moment(roomMap.getIn(['playing', 'started']));
         const finished = started.add(duration);
         if(moment().isBefore(finished)) {
-          store.dispatch({ type: 'NEXT_VIDEO', room, started: moment() });
+          store.dispatch(nextVideo(room, moment()));
         }
       }
     });
