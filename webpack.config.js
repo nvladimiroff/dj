@@ -1,9 +1,6 @@
-var webpack = require('webpack')
-
 module.exports = {
   entry: [
-    'webpack-hot-middleware/client',
-    './app/index.jsx'
+    './client/index.jsx'
   ],
   module: {
     loaders: [{
@@ -20,10 +17,6 @@ module.exports = {
     publicPath: '/static/',
     filename: 'bundle.js'
   },
-  plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin()
-  ],
   devServer: {
     contentBase: './dist'
   }

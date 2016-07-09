@@ -5,38 +5,41 @@ import { renderToString } from 'react-dom/server'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { match, RouterContext } from 'react-router'
-//import createLocation from 'history/lib/createLocation';
-
-import webpack from 'webpack'
-import webpackDevMiddleware from 'webpack-dev-middleware'
-import webpackHotMiddleware from 'webpack-hot-middleware'
-import webpackConfig from './webpack.config'
+import routes from './app/routes'
+import { createLocation } from 'history/lib/LocationUtils';
 
 import reducer from './app/reducers'
-import App from './app/containers/App'
 
 const app = express()
 const port = 3000
 
-const compiler = webpack(webpackConfig)
-app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }))
-app.use(webpackHotMiddleware(compiler))
-
+app.use('/static/', express.static(path.join(__dirname, 'dist')));
 app.use(handleRender)
-app.use(express.static(path.join(__dirname, 'dist')));
 
 function handleRender(req, res) {
-  const store = createStore(reducer)
+  const location = createLocation(req.url)
 
-  const html = renderToString(
-    <Provider store={store}>
-      <App />
-    </Provider>
-  )
+  match({ routes, location }, (error, redirectLocation, renderProps) => {
+    if(error) {
+      res.status(500).send(error.message)
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search)
+    } else if (renderProps) {
+      const store = createStore(reducer)
 
-  const initialState = store.getState()
+      const html = renderToString(
+        <Provider store={store}>
+          <RouterContext {...renderProps} />
+        </Provider>
+      )
 
-  res.send(renderFullPage(html, initialState))
+      const initialState = store.getState()
+
+      res.send(renderFullPage(html, initialState))
+    } else {
+      res.status(404).send('Not found')
+    }
+  })
 }
 
 function renderFullPage(html, initialState) {
