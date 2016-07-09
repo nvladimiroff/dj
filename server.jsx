@@ -5,13 +5,22 @@ import { renderToString } from 'react-dom/server'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { match, RouterContext } from 'react-router'
-import createLocation from 'history/lib/createLocation';
+//import createLocation from 'history/lib/createLocation';
+
+import webpack from 'webpack'
+import webpackDevMiddleware from 'webpack-dev-middleware'
+import webpackHotMiddleware from 'webpack-hot-middleware'
+import webpackConfig from './webpack.config'
 
 import reducer from './app/reducers'
 import App from './app/containers/App'
 
 const app = express()
 const port = 3000
+
+const compiler = webpack(webpackConfig)
+app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }))
+app.use(webpackHotMiddleware(compiler))
 
 app.use(handleRender)
 app.use(express.static(path.join(__dirname, 'dist')));
@@ -42,10 +51,16 @@ function renderFullPage(html, initialState) {
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
         </script>
-        <script src="/dist/bundle.js"></script>
+        <script src="/static/bundle.js"></script>
       </body>
     </html>
   `
 }
 
-app.listen(port)
+app.listen(port, (error) => {
+  if (error) {
+    console.error(error)
+  } else {
+    console.info(`http://localhost:${port}/`)
+  }
+})
